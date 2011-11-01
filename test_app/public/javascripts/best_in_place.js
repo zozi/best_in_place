@@ -178,6 +178,8 @@ BestInPlaceEditor.prototype = {
 
   loadSuccessCallback : function(data) {
     this.element.html(data[this.objectName]);
+    this.element.trigger($.Event("ajax:success"), data);
+
     // Binding back after being clicked
     $(this.activator).bind('click', {editor: this}, this.clickHandler);
   },
@@ -337,7 +339,9 @@ BestInPlaceEditor.forms = {
 
 jQuery.fn.best_in_place = function() {
   this.each(function(){
-    jQuery(this).data('bestInPlaceEditor', new BestInPlaceEditor(this));
+    if (!jQuery(this).data('bestInPlaceEditor')) {
+      jQuery(this).data('bestInPlaceEditor', new BestInPlaceEditor(this));
+    }
   });
   return this;
 };
